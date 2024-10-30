@@ -33,7 +33,7 @@ print(total_prise)
 new_list = []
 for i in range(1, 11):
     j = i ** 2
-    new_list.append(tuple((i, j)))
+    new_list.append([i, j])
 print (new_list)
 
 # Task 4
