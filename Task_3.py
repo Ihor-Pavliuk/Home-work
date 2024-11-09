@@ -1,10 +1,21 @@
-from mymod import test, test_2
+def choose_func(nums: list, func1, func2):
+    for i in nums:
+        if i < 0:
+            return func2(nums)
+    return func1(nums)
+    
+nums1 = [1, 2, 3, 4, 5]
 
-test("data.txt")
-test_2("data.txt")
+nums2 = [1, -2, 3, -4, 5]
 
-#Does your PYTHONPATH need to include the directory where you created mymod.py?
-#Так, потрібен, оскільки я працюю в каталозі BEETROOT_128, а файл mymod міститься в підкаталозі Home_work_9, і його не знаходить. Рішення є два, або прописувати шлях до файлу, або скопіювати до каталогу з якого я працюю. я не став заморачуватися з import os і скопіював файл.
+def square_nums(nums):
 
-#Try running your module on itself: e.g., test("mymod.py"). Note that the test opens the file twice; if you’re feeling ambitious, you may be able to improve this by passing an open file object into the two count functions (hint: file.seek(0) is a file rewind).
-# для цього доведеться 2 функції об'єднати в одну, і використати file.seek(0) для повернення на нульовий індекс 
+    return [num ** 2 for num in nums]
+
+def remove_negatives(nums):
+
+    return [num for num in nums if num > 0]
+
+assert choose_func(nums1, square_nums, remove_negatives) == [1, 4, 9, 16, 25]
+
+assert choose_func(nums2, square_nums, remove_negatives) == [1, 3, 5]
