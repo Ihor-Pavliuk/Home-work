@@ -1,10 +1,35 @@
-from mymod import test, test_2
+#Write a decorator 'arg_rules' that validates arguments passed to the function.
 
-test("data.txt")
-test_2("data.txt")
+#A decorator should take 3 arguments:
 
-#Does your PYTHONPATH need to include the directory where you created mymod.py?
-#Так, потрібен, оскільки я працюю в каталозі BEETROOT_128, а файл mymod міститься в підкаталозі Home_work_9, і його не знаходить. Рішення є два, або прописувати шлях до файлу, або скопіювати до каталогу з якого я працюю. я не став заморачуватися з import os і скопіював файл.
+#max_length: 15
+#type_: str
+#contains: []  - list of symbols that an argument should contain
 
-#Try running your module on itself: e.g., test("mymod.py"). Note that the test opens the file twice; if you’re feeling ambitious, you may be able to improve this by passing an open file object into the two count functions (hint: file.seek(0) is a file rewind).
-# для цього доведеться 2 функції об'єднати в одну, і використати file.seek(0) для повернення на нульовий індекс 
+#If some of the rules' checks returns False, the function should return False and print the reason it failed; otherwise, return the result.
+
+def arg_rules(type_: type, max_length: int, contains: list):
+    def decorator(func):
+        def wrapper(args): # тут виникла цікава помилка, якщо написати *args тоді всі аргументи будуть кортежом, і завжди не будуть проходити перевірку. 
+            if not isinstance (args, type_):
+                print(f"Type is not {type_}, please check it")
+                return False
+            if len(args) > max_length:
+                print(f"Max length is bigger than {max_length}")
+                return False
+            if contains:
+                for i in contains:
+                    if i not in args:
+                        print(f'Contains mast have {contains}')
+                        return False
+            return func(args)
+        return wrapper
+    return decorator
+
+@arg_rules(type_=str, max_length=15, contains=['05', '@'])
+def create_slogan(name: str) -> str:
+    return f"{name} drinks pepsi in his brand new BMW!"
+assert create_slogan('johndoe05@gmail.com') is False
+
+assert create_slogan("S@SH05") == "S@SH05 drinks pepsi in his brand new BMW!"
+
