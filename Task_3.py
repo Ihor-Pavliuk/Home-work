@@ -1,10 +1,51 @@
-from mymod import test, test_2
+#Fraction
 
-test("data.txt")
-test_2("data.txt")
+#Створіть клас Fraction, який буде представляти всю базову арифметичну логіку для дробів (+, -, /, *) з належною 
+# перевіркою й обробкою помилок. Потрібно додати магічні методи для математичних операцій та операції порівняння між 
+# об'єктами класу Fraction
+import math
+ 
 
-#Does your PYTHONPATH need to include the directory where you created mymod.py?
-#Так, потрібен, оскільки я працюю в каталозі BEETROOT_128, а файл mymod міститься в підкаталозі Home_work_9, і його не знаходить. Рішення є два, або прописувати шлях до файлу, або скопіювати до каталогу з якого я працюю. я не став заморачуватися з import os і скопіював файл.
+class Fraction:
+    def __init__(self, a, b):
+        if a ==0 or b == 0:
+            raise ZeroDivisionError("Numbers can`t be zero")
+        gcd = math.gcd(a, b)
+        self.a = a // gcd
+        self.b = b // gcd
+        #print(self.a, self.b)
+    
+    def __add__(self, other):
+        new_a = (self.a * other.b) + (other.a * self.b)
+        new_b = self.b * other.b
+        return Fraction(new_a, new_b)
+    def __sub__(self, other):
+        new_a = (self.a * other.b) - (other.a * self.b)
+        new_b = self.b * other.b
+        return Fraction(new_a, new_b)
+    def __mul__(self, other):
+        new_a = self.a * other.a
+        new_b = self.b * other.b
+        return Fraction(new_a, new_b)
+    def __truediv__(self, other):
+        new_a = self.a * other.b
+        new_b = self.b * other.a
+        return Fraction(new_a, new_b)
+    def __eq__(self, other):
+        return self.a * other.b == other.a * self.b
+    def __str__(self):
+        return f"{self.a}/{self.b}"
+    
+if __name__ == "__main__":
+    x = Fraction(1, 2)
+    y = Fraction(1, 4)
+    x + y == Fraction(3, 4)
+assert x + y == Fraction(3, 4)
+result_sub = x - y
+print(result_sub) 
 
-#Try running your module on itself: e.g., test("mymod.py"). Note that the test opens the file twice; if you’re feeling ambitious, you may be able to improve this by passing an open file object into the two count functions (hint: file.seek(0) is a file rewind).
-# для цього доведеться 2 функції об'єднати в одну, і використати file.seek(0) для повернення на нульовий індекс 
+result_mul = x * y
+print(result_mul)  
+
+result_div = x / y
+print(result_div)
