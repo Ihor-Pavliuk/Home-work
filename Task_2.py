@@ -44,7 +44,7 @@ class Library:
         self.authors = []
 
     def new_book(self,name: str, year: int, author: Author ):
-        book = Book[name, year, author]    
+        book = Book(name, year, author)    
         self.books.append(book)
         if author not in self.authors:
             self.authors.append(author)
