@@ -1,10 +1,73 @@
-from mymod import test, test_2
+#Write a class TypeDecorators which has several methods for converting results of functions to a specified type (if it's 
+# possible):
 
-test("data.txt")
-test_2("data.txt")
+#methods:
 
-#Does your PYTHONPATH need to include the directory where you created mymod.py?
-#Так, потрібен, оскільки я працюю в каталозі BEETROOT_128, а файл mymod міститься в підкаталозі Home_work_9, і його не знаходить. Рішення є два, або прописувати шлях до файлу, або скопіювати до каталогу з якого я працюю. я не став заморачуватися з import os і скопіював файл.
+#to_int
 
-#Try running your module on itself: e.g., test("mymod.py"). Note that the test opens the file twice; if you’re feeling ambitious, you may be able to improve this by passing an open file object into the two count functions (hint: file.seek(0) is a file rewind).
-# для цього доведеться 2 функції об'єднати в одну, і використати file.seek(0) для повернення на нульовий індекс 
+#to_str
+
+#to_bool
+
+#to_float
+
+#Don't forget to use @wraps
+from functools import wraps
+class TypeDecorators:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def to_int(func):
+        @wraps(func)
+        def wrapper(agrs):
+            try:
+                return int(func(agrs))
+            except ValueError:
+                raise ValueError("Cann't convert it")
+        return wrapper
+    
+    @staticmethod
+    def to_str(func):
+        @wraps(func)
+        def wrapper(agrs):
+            try:
+                return str(func(agrs))
+            except ValueError:
+                raise ValueError("Cann't convert it")
+        return wrapper
+    
+    @staticmethod
+    def to_bool(func):
+        @wraps(func)
+        def wrapper(agrs):
+            if agrs.lower() == "true":
+                return True
+            elif agrs.lower() == "false":
+                return False
+            else:
+                raise ValueError("Cann't convert it")
+        return wrapper
+    
+    @staticmethod
+    def to_float(func):
+        @wraps(func)
+        def wrapper(agrs):
+            try:
+                return float(func(agrs))
+            except ValueError:
+                raise ValueError("Cann't convert it")
+        return wrapper
+ 
+
+@TypeDecorators.to_int
+def do_nothing(string: str):
+    return string
+
+@TypeDecorators.to_bool
+def do_something(string: str):
+    return string
+
+assert do_nothing('25') == 25
+
+assert do_something('True') is True
