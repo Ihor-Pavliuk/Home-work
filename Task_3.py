@@ -26,7 +26,7 @@ class Product:
         self.name = name
         self.price = price
 
-class ProductStore(Product):
+class ProductStore:
     def __init__(self):
         self.products = {}
         self.income = 0
