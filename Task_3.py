@@ -1,4 +1,3 @@
-from pprint import pprint
 #Product Store
 
 #Write a class Product that has three attributes:
@@ -25,49 +24,48 @@ class Product:
         self.product_type = product_type
         self.name = name
         self.price = price
+        self.amount = 0
+        self.discount = 0
+
 
 class ProductStore:
     def __init__(self):
         self.products = {}
         self.income = 0
-    def add(self, product, amount):
-        final_price = product.price * 1.3
+    def add(self, product: Product, amount):
+        product.price = product.price * 1.3
         if amount <= 0:
             raise ValueError("Amount <= 0")
 
         if product.name in self.products:
-            self.products[product.name]['amount'] += amount
+            self.products[product.name].amount += amount
 
         else:
-            self.products[product.name] = {
-                'product': product,
-                'amount': amount,
-                'price': final_price,
-                'discount': 0
-            }
+            product.amount = amount
+            self.products[product.name] = product
     def set_discount(self, identifier, percent, identifier_type = 'name'):
-        if not (0 <= percent <= 100):
+        if not (0 < percent <= 100):
             raise ValueError("Discount percent must be between 0 and 100.")
+        discount = 1 - (percent / 100)
         product_found = False
-        for product_name, product_info in self.products.items():
-            product = product_info['product']
-            if identifier_type == 'name' and product_name == identifier:
-                product_info['discount'] = percent
-                product_info['price'] = product_info['price'] * (1 - percent / 100)
+        for product in self.products.values():
+            if identifier_type == 'name' and product.name == identifier:
+                product.discount = percent
+                product.price *=discount
                 product_found = True
 
-            elif identifier_type == 'type' and product.product_name == identifier:
-                product_info['discount'] = percent
-                product_info['price'] = product_info['price'] * (1 - percent / 100)
+            elif identifier_type == 'type' and product.product_type == identifier:
+                product.discount = percent
+                product.price *= discount
                 product_found = True
         if not product_found:
             raise ValueError("Product not found")
             
     def sell_product(self, product_name, amount):
         if product_name in self.products:
-            if self.products[product_name]['amount'] >= amount:
-                self.products[product_name]['amount'] -= amount
-                self.income += self.products[product_name]['price'] * amount
+            if self.products[product_name].amount >= amount:
+                self.products[product_name].amount -= amount
+                self.income += self.products[product_name].price * amount
             else:
                 raise ValueError("Not enough product in shop")
         else:
@@ -75,16 +73,16 @@ class ProductStore:
 
 
     def get_income(self):
-        print (f'All income = {self.income}')
+        print (f'All income = {self.income}$')
 
     def get_all_products(self):
-        for k, v in self.products.items():
-            print(f"Product {k}  amount = {self.products[k]['amount']}, price is {self.products[k]['price']:.2f}, and Discount: {v['discount']}%")
+        for product in self.products.values():
+            print (f"Product: {product.name}, Type: {product.product_type}, Amount: {product.amount}, Price: {product.price:.2f}$, Discount: {product.discount}%")
 
     def get_product_info(self, product_name):
         tuple_list = ()
         if product_name in self.products:
-            tuple_list = (product_name, self.products[product_name]['amount'])
+            tuple_list = (product_name, self.products[product_name].amount)
         else:
             raise ValueError ("Product not found")
         return tuple_list
@@ -101,7 +99,7 @@ s = ProductStore()
 s.add(p, 10)
 
 s.add(p2, 300)
-
+s.set_discount('Ramen', 10, 'name')
 s.sell_product('Ramen', 10)
 s.get_all_products()
 
@@ -109,3 +107,4 @@ assert s.get_product_info('Ramen') == ('Ramen', 290)
 
 s.add(p2, 300)
 assert s.get_product_info('Ramen') == ('Ramen', 590)
+s.get_income()
