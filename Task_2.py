@@ -1,10 +1,20 @@
-import sys
+class Mathematician():
 
-sys.path.append("C:\\Users\\User\\OneDrive\\Робочий стіл\\Python\\Beetroot_128\\Home_work_9\\sys.py")
-for i in sys.path:
-    del sys.path[0]
-    del sys.path[0]
-    del sys.path[0]
-print (sys.path)
-# Я можу видалити всі шляхи до sys, окрім пари, з дерикторії в якій я запускаю модулі
-# на функціонал це ніяк не вплинуло
+    pass
+    def square_nums(self, nums):
+        return [num ** 2 for num in nums]
+    def remove_positives(self, nums):
+        return [num for num in nums if num < 0]
+    def filter_leaps(self, nums):
+        return [num for num in nums if num / 4]
+        
+ 
+
+m = Mathematician()
+
+assert m.square_nums([7, 11, 5, 4]) == [49, 121, 25, 16]
+
+assert m.remove_positives([26, -11, -8, 13, -90]) == [-11, -8, -90]
+#assert m.filter_leaps([2001, 1884, 1995, 2003, 2020]) == [1884, 2020]
+print (m.filter_leaps([2001, 1884, 1995, 2003, 2020]))
+#який ділиться на чотири, є високосним, за винятком років, які діляться на 100, але не діляться на 400
