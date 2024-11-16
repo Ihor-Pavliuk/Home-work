@@ -1,10 +1,40 @@
-from mymod import test, test_2
+# Create your own implementation of an iterable, which could be used inside for-in loop. Also, add logic for retrieving elements
+#  using square brackets syntax.
+class MyItarableForSquare():
+    def __init__(self, *args):
+        self.iterable = args
+              
+    def __iter__(self):
+        self.start = 0
+        return self 
 
-test("data.txt")
-test_2("data.txt")
+    def __next__(self):
+        if self.start < len(self.iterable):
+            value = self.iterable[self.start]
+            self.start += 1 
+            return value
+        else:
+            raise StopIteration 
+    def __len__(self):
+        return len(self.iterable)     
+    def __getitem__(self, index):
+        if isinstance(index, int):  
+            if index < 0:
+                index += len(self.iterable)
+            if 0 <= index < len(self.iterable):
+                return self.iterable[index]
+            else:
+                raise IndexError("Out of range")
+        elif isinstance(index, slice):
+            return self.iterable[index.start:index.stop:index.step]
+        else:
+            raise TypeError("Wrong slice")
 
-#Does your PYTHONPATH need to include the directory where you created mymod.py?
-#Так, потрібен, оскільки я працюю в каталозі BEETROOT_128, а файл mymod міститься в підкаталозі Home_work_9, і його не знаходить. Рішення є два, або прописувати шлях до файлу, або скопіювати до каталогу з якого я працюю. я не став заморачуватися з import os і скопіював файл.
-
-#Try running your module on itself: e.g., test("mymod.py"). Note that the test opens the file twice; if you’re feeling ambitious, you may be able to improve this by passing an open file object into the two count functions (hint: file.seek(0) is a file rewind).
-# для цього доведеться 2 функції об'єднати в одну, і використати file.seek(0) для повернення на нульовий індекс 
+       
+    
+a = MyItarableForSquare(1, 'word', 3, 4, 5, 6, 7, 8, 9)
+for value in a:
+    print(value)
+print(a[-8])
+print(a[1])
+print(a[0:100:4])
