@@ -1,10 +1,46 @@
-import sys
+#Write a program that reads in a sequence of characters, and determines whether it's parentheses, 
+# braces, and curly brackets are "balanced."
 
-sys.path.append("C:\\Users\\User\\OneDrive\\Робочий стіл\\Python\\Beetroot_128\\Home_work_9\\sys.py")
-for i in sys.path:
-    del sys.path[0]
-    del sys.path[0]
-    del sys.path[0]
-print (sys.path)
-# Я можу видалити всі шляхи до sys, окрім пари, з дерикторії в якій я запускаю модулі
-# на функціонал це ніяк не вплинуло
+class Stack:
+    def __init__(self):
+        self.__items = []
+
+
+    def push(self, new_item):
+        self.__items.append(new_item)
+
+
+    def pop(self):
+        return self.__items.pop()
+
+    def get(self):
+        return self.__items[-1]
+
+    def __str__(self):
+        return str(self.__items)
+
+    def __ne__(self, other):
+        return self.__items == other
+
+    def __eq__(self, other):
+        return self.__items == other
+
+    def __len__(self):
+        return len(self.__items)
+
+def is_balanced(equation):
+    stack = Stack()
+
+    for c in equation:
+        if c == "[" or c == "{":
+            stack.push(c)
+        elif c == "]" or c == "}":
+            if not stack:
+                return False
+            stack.pop()
+    return len(stack) == 0
+
+
+x = "[Hello] {Pyphon}"
+result  = is_balanced(x)
+print("Result", result)
