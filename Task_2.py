@@ -32,9 +32,16 @@ def is_balanced(equation):
     stack = Stack()
 
     for c in equation:
-        if c == "[" or c == "{":
+        if c == "[":
             stack.push(c)
-        elif c == "]" or c == "}":
+        elif c == "]":
+            if not stack:
+                return False
+            stack.pop()
+    for d in equation:
+        if d == "{":
+            stack.push(d)
+        elif d == "}":
             if not stack:
                 return False
             stack.pop()
