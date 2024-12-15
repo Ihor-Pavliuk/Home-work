@@ -31,20 +31,19 @@ class Stack:
 def is_balanced(equation):
     stack = Stack()
 
-    for c in equation:
-        if c == "[":
+     for c in equation:
+        if c in "([{":
             stack.push(c)
-        elif c == "]":
+        elif c in ")]}":
             if not stack:
                 return False
-            stack.pop()
-    for d in equation:
-        if d == "{":
-            stack.push(d)
-        elif d == "}":
-            if not stack:
+            top = stack.pop()
+            if (c == ")" and top == "(") or \
+            (c == "]" and top == "[") or \
+            (c == "}" and top == "{"):
+                continue
+            else:
                 return False
-            stack.pop()
     return len(stack) == 0
 
 
